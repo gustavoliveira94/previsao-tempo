@@ -4,6 +4,9 @@ import axios from 'axios';
 // Styles
 import Background from './style/app/background';
 
+// Component
+import Weather from './components/weather';
+
 const App = () => {
     const [img, setImg] = useState('');
 
@@ -22,9 +25,11 @@ const App = () => {
         dataBackground();
     }, []);
 
-    console.log(img);
-
-    return <Background img={img} />;
+    return (
+        <Background img={img}>
+            <Weather />
+        </Background>
+    );
 };
 
 export default App;

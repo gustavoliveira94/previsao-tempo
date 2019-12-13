@@ -1204,6 +1204,13 @@
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
 
+"@tanem/svg-injector@^8.0.35":
+  version "8.0.35"
+  resolved "https://registry.yarnpkg.com/@tanem/svg-injector/-/svg-injector-8.0.35.tgz#91e177add726265ec5ad6d81c9b6a2a62c1120f8"
+  integrity sha512-aDiTinv2l2WCMNzbmq+W0aTf/uFPR24OD4xgSNPemUI/9yfGtfxgSuK3fdisvSLqnBl0M3Br6ifZHWCjWZKadQ==
+  dependencies:
+    "@babel/runtime" "^7.6.3"
+
 "@testing-library/dom@^6.3.0":
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-6.10.1.tgz#da5bf5065d3f9e484aef4cc495f4e1a5bea6df2e"
@@ -8623,6 +8630,15 @@ react-scripts@3.3.0:
     workbox-webpack-plugin "4.3.1"
   optionalDependencies:
     fsevents "2.1.2"
+
+react-svg@^11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/react-svg/-/react-svg-11.0.3.tgz#2666de8e60326c4f7d382ce9c77cde8a4ef5cecb"
+  integrity sha512-h/jwiITU/rn7YhChNxbejAkUPDwbJxp0oeupC2OHbcYFymamHaL5D+bJALxktlA76xoEAnxdsUO867INp8KwwQ==
+  dependencies:
+    "@babel/runtime" "^7.7.2"
+    "@tanem/svg-injector" "^8.0.35"
+    prop-types "^15.7.2"
 
 react@^16.12.0:
   version "16.12.0"
