@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable radix */
 /* eslint-disable import/no-dynamic-require */
 import React, { useState, useEffect, useCallback } from 'react';
@@ -16,48 +17,25 @@ import Icon from '../../style/weather/icon';
 import Tomorrow from '../../style/weather/tomorrow';
 import Status from '../../style/weather/status';
 
+// API
+import GetWeather from '../../api/getweather';
+
 const Weather = () => {
     const [state, setState] = useState({
         weather: [],
         initCity: '',
         city: '',
+        getCity: '',
         lat: '',
         long: '',
-        celsiusToDay: true,
-        celsiusTomorrow: true,
-        celsiusAfterTomorrow: true,
-        farenheit: false,
-        tempToDay: '',
-        tempTomorrow: '',
-        tempTAfterTomorrow: '',
-        colorToDay: '',
-        colorTomorrow: '',
-        colorAfterTomorrow: '',
-        loading: false,
+        celsius: [true, true, true],
+        temp: [],
         status: 'Carregando...',
     });
-
-    // Get Weather
-    const getWeather = useCallback(async () => {
-        try {
-            const data = await axios.get(
-                `http://api.openweathermap.org/data/2.5/forecast?q=${state.initCity ||
-                    state.city}&APPID=7ba73e0eb8efe773ed08bfd0627f07b8`
-            );
-
-            setState({
-                ...state,
-                weather: data.data,
-            });
-        } catch (e) {
-            setState({
-                ...state,
-                weather: [],
-                status: 'Local não encontrado!',
-            });
-            console.log(e);
-        }
-    }, [state]);
+    const useWeather = GetWeather({
+        city: state.city,
+        initCity: state.initCity,
+    });
 
     // Get Location Init
     const getLocation = useCallback(async () => {
@@ -89,43 +67,54 @@ const Weather = () => {
     }, [state.lat, state.long]);
 
     useEffect(() => {
-        if (state.initCity) {
-            getWeather();
+        if (state.initCity || useWeather) {
+            setState({
+                ...state,
+                weather:
+                    useWeather !== 'Nenhum local encontrado!'
+                        ? useWeather.weather
+                        : setState({ ...state, status: useWeather }),
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state.initCity]);
+    }, [state.initCity, useWeather]);
 
     useEffect(() => {
         const convert = 273;
 
         const temp = [
             parseInt(
-                state.weather.list && state.weather.list[0].main.temp - convert
+                state.weather &&
+                    state.weather.list &&
+                    state.weather.list[0].main.temp - convert
             ),
             parseInt(
-                state.weather.list && state.weather.list[1].main.temp - convert
+                state.weather &&
+                    state.weather.list &&
+                    state.weather.list[1].main.temp - convert
             ),
             parseInt(
-                state.weather.list && state.weather.list[2].main.temp - convert
+                state.weather &&
+                    state.weather.list &&
+                    state.weather.list[2].main.temp - convert
             ),
         ];
         setState({
             ...state,
-            colorToDay: temp[0],
-            colorTomorrow: temp[1],
-            colorAfterTomorrow: temp[2],
-            tempToDay: parseInt(
-                state.weather.list && state.weather.list[0].main.temp - convert
-            ),
-            tempTomorrow: parseInt(
-                state.weather.list && state.weather.list[1].main.temp - convert
-            ),
-            tempAfterTomorrow: parseInt(
-                state.weather.list && state.weather.list[2].main.temp - convert
-            ),
+            temp,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.weather]);
+
+    const changeTemp = index => {
+        setState({
+            ...state,
+            ...(state.temp[index] = state.celsius[index]
+                ? (state.temp[index] - 32) / 1.8
+                : 1.8 * state.temp[index] + 32),
+            ...(state.celsius[index] = !state.celsius[index]),
+        });
+    };
 
     const iconweather =
         state.weather &&
@@ -133,34 +122,43 @@ const Weather = () => {
         state.weather.list[0].weather[0].icon;
 
     const statusDay =
-        state.weather.list && state.weather.list[0].weather[0].description;
+        state.weather &&
+        state.weather.list &&
+        state.weather.list[0].weather[0].description;
+
+    console.log(state.weather);
 
     return (
         <Container>
             <ContainerInput>
                 <img src={iconInput} alt="" />
                 <input
-                    value={state.initCity || state.city}
+                    value={state.initCity || state.getCity}
                     placeholder="Digite uma cidade"
                     onChange={e =>
                         setState({
                             ...state,
                             initCity: '',
-                            city: e.target.value,
+                            getCity: e.target.value,
                         })
                     }
                 />
-                <button type="button" onClick={() => getWeather()}>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setState({ ...state, city: state.getCity });
+                    }}
+                >
                     Pesquisar
                 </button>
             </ContainerInput>
             {/* Content Weather */}
             {state.weather && state.weather.list ? (
-                <Content color={state.colorToDay}>
+                <Content celsius={state.celsius[0]} color={state.temp[0]}>
                     <Icon>
                         <img
                             src={`https://openweathermap.org/img/wn/${iconweather}@2x.png`}
-                            alt=""
+                            alt="Weather"
                         />
                     </Icon>
                     <Info>
@@ -168,22 +166,13 @@ const Weather = () => {
                             <h3>Hoje</h3>
                             <button
                                 type="button"
-                                title={`${parseInt(state.tempToDay)}${
-                                    state.celsiusToDay ? 'º' : 'F'
+                                title={`${parseInt(state.temp[0])}${
+                                    state.celsius[0] ? 'Cº' : 'Fº'
                                 }`}
-                                onClick={() =>
-                                    setState({
-                                        ...state,
-                                        tempToDay: state.celsiusToDay
-                                            ? (state.tempToDay - 32) / 1.8
-                                            : 1.8 * state.tempToDay + 32,
-                                        celsiusToDay: !state.celsiusToDay,
-                                        farenheit: !state.farenheit,
-                                    })
-                                }
+                                onClick={() => changeTemp(0)}
                             >
-                                {parseInt(state.tempToDay)}
-                                {state.celsiusToDay ? 'º' : 'F'}
+                                {parseInt(state.temp[0])}
+                                {state.celsius[0] ? 'Cº' : 'Fº'}
                             </button>
                         </ContentInfo>
                         <ContentInfo>
@@ -213,58 +202,40 @@ const Weather = () => {
                                 hPA
                             </p>
                         </ContentInfo>
-                        <Tomorrow tomorrow color={state.colorTomorrow}>
+                        <Tomorrow
+                            tomorrow
+                            celsius={state.celsius[1]}
+                            color={state.temp[1]}
+                        >
                             <div>
                                 <h3>Amanhã</h3>
                                 <button
                                     type="button"
-                                    title={`${parseInt(state.tempTomorrow)}${
-                                        state.celsiusTomorrow ? 'º' : 'F'
+                                    title={`${parseInt(state.temp[1])}${
+                                        state.celsius[1] ? 'Cº' : 'Fº'
                                     }`}
-                                    onClick={() =>
-                                        setState({
-                                            ...state,
-                                            tempTomorrow: state.celsiusTomorrow
-                                                ? (state.tempTomorrow - 32) /
-                                                  1.8
-                                                : 1.8 * state.tempTomorrow + 32,
-                                            celsiusTomorrow: !state.celsiusTomorrow,
-                                            farenheit: !state.farenheit,
-                                        })
-                                    }
+                                    onClick={() => changeTemp(1)}
                                 >
-                                    {parseInt(state.tempTomorrow)}
-                                    {state.celsiusTomorrow ? 'º' : 'F'}
+                                    {parseInt(state.temp[1])}
+                                    {state.celsius[1] ? 'Cº' : 'Fº'}
                                 </button>
                             </div>
                         </Tomorrow>
-                        <Tomorrow color={state.colorAfterTomorrow}>
+                        <Tomorrow
+                            celsius={state.celsius[2]}
+                            color={state.temp[2]}
+                        >
                             <div>
                                 <h3>Depois de Amanhã</h3>
                                 <button
-                                    title={`${parseInt(
-                                        state.tempAfterTomorrow
-                                    )}${
-                                        state.celsiusAfterTomorrow ? 'º' : 'F'
+                                    title={`${parseInt(state.temp[2])}${
+                                        state.celsius[2] ? 'Cº' : 'Fº'
                                     }`}
                                     type="button"
-                                    onClick={() =>
-                                        setState({
-                                            ...state,
-                                            tempAfterTomorrow: state.celsiusAfterTomorrow
-                                                ? (state.tempAfterTomorrow -
-                                                      32) /
-                                                  1.8
-                                                : 1.8 *
-                                                      state.tempAfterTomorrow +
-                                                  32,
-                                            celsiusAfterTomorrow: !state.celsiusAfterTomorrow,
-                                            farenheit: !state.farenheit,
-                                        })
-                                    }
+                                    onClick={() => changeTemp(2)}
                                 >
-                                    {parseInt(state.tempAfterTomorrow)}
-                                    {state.celsiusAfterTomorrow ? 'º' : 'F'}
+                                    {parseInt(state.temp[2])}
+                                    {state.celsius[2] ? 'Cº' : 'Fº'}
                                 </button>
                             </div>
                         </Tomorrow>
@@ -272,7 +243,11 @@ const Weather = () => {
                 </Content>
             ) : (
                 <Status>
-                    <h1>{state.status}</h1>
+                    <h1>
+                        {state.weather !== 'Nenhum local encontrado!'
+                            ? state.status
+                            : state.weather}
+                    </h1>
                 </Status>
             )}
         </Container>

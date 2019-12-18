@@ -1,5 +1,20 @@
 /* eslint-disable no-nested-ternary */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const colors = css`
+    background-color: ${props =>
+        props.celsius
+            ? props.color >= 15 && props.color <= 35
+                ? '#fccd05'
+                : props.color < 15
+                ? '#0060D1'
+                : '#D72E11'
+            : 1.8 * props.color + 32 >= 15 && 1.8 * props.color + 32 <= 35
+            ? '#fccd05'
+            : 1.8 * props.color + 32 < 15
+            ? '#0060D1'
+            : '#D72E11'};
+`;
 
 const Tomorrow = styled.div`
     width: 100%;
@@ -11,12 +26,7 @@ const Tomorrow = styled.div`
     position: absolute;
     left: 0;
     bottom: ${props => (props.tomorrow ? '70px' : '0')};
-    background-color: ${props =>
-        props.color >= 15 && props.color <= 35
-            ? '#fccd05'
-            : props.color < 15
-            ? '#0060D1'
-            : '#D72E11'};
+    ${colors};
     color: #fff;
 
     div {
