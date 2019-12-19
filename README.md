@@ -2,9 +2,9 @@
 
 ## Descrição
 
-1. Carro muda da pista de acordo com o flex da pista.
-2. Obstáculos são criados com math.random e pode ser flex-start, center ou flex-end.
-3. Quando o jogo é pausado não renderiza obstáculos e não contabiliza número de voltas.
+Aplicação para verificar a previsão do tempo.
+Logo quando iniciar a aplicação automaticamente irá pegar a sua localização e renderizar a previsão do local.
+Você também pode alterar a localização para visualizar a previsão de outras cidades.
 
 ## Instalação
 
