@@ -4,8 +4,6 @@ import axios from 'axios';
 const GetWeather = ({ city, initCity }) => {
     const [weather, setWeather] = useState([]);
 
-    console.log(weather);
-
     // Get Weather
     const getWeather = useCallback(async () => {
         try {
@@ -14,13 +12,9 @@ const GetWeather = ({ city, initCity }) => {
                     city}&APPID=7ba73e0eb8efe773ed08bfd0627f07b8`
             );
 
-            setWeather({
-                weather: data.data,
-            });
+            setWeather(data.data);
         } catch (e) {
-            setWeather({
-                weather: 'Nenhum local encontrado!',
-            });
+            setWeather('Nenhum local encontrado!');
             console.log(e);
         }
     }, [city, initCity]);

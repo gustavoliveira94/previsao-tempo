@@ -70,10 +70,7 @@ const Weather = () => {
         if (state.initCity || useWeather) {
             setState({
                 ...state,
-                weather:
-                    useWeather !== 'Nenhum local encontrado!'
-                        ? useWeather.weather
-                        : setState({ ...state, status: useWeather }),
+                weather: useWeather,
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,12 +123,10 @@ const Weather = () => {
         state.weather.list &&
         state.weather.list[0].weather[0].description;
 
-    console.log(state.weather);
-
     return (
         <Container>
             <ContainerInput>
-                <img src={iconInput} alt="" />
+                <img src={iconInput} alt="input" />
                 <input
                     value={state.initCity || state.getCity}
                     placeholder="Digite uma cidade"
@@ -165,6 +160,7 @@ const Weather = () => {
                         <ContentInfo>
                             <h3>Hoje</h3>
                             <button
+                                data-testid="convert"
                                 type="button"
                                 title={`${parseInt(state.temp[0])}${
                                     state.celsius[0] ? 'Cº' : 'Fº'
