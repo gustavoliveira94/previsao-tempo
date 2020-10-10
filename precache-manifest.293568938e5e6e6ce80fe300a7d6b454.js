@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "918bd6b86776cc79cd62b41f8541564e",
+    "revision": "57bfc39db690f81fb2937019a5927932",
     "url": "/previsao-tempo/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/previsao-tempo/static/js/2.414a461b.chunk.js.LICENSE"
   },
   {
-    "revision": "45c1910c45d794115e19",
-    "url": "/previsao-tempo/static/js/main.67f8ed53.chunk.js"
+    "revision": "b0644d0b981058123812",
+    "url": "/previsao-tempo/static/js/main.c7b68034.chunk.js"
   },
   {
     "revision": "4e16d0e97307eef81346",
