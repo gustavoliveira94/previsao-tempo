@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/previsao-tempo/static/js/main.08732d9d.chunk.js",
+    "main.js.map": "/previsao-tempo/static/js/main.08732d9d.chunk.js.map",
+    "runtime-main.js": "/previsao-tempo/static/js/runtime-main.1f093fbc.js",
+    "runtime-main.js.map": "/previsao-tempo/static/js/runtime-main.1f093fbc.js.map",
+    "static/js/2.414a461b.chunk.js": "/previsao-tempo/static/js/2.414a461b.chunk.js",
+    "static/js/2.414a461b.chunk.js.map": "/previsao-tempo/static/js/2.414a461b.chunk.js.map",
+    "index.html": "/previsao-tempo/index.html",
+    "precache-manifest.bdb07b49afaf75ce164e476d06359ccc.js": "/previsao-tempo/precache-manifest.bdb07b49afaf75ce164e476d06359ccc.js",
+    "service-worker.js": "/previsao-tempo/service-worker.js",
+    "static/js/2.414a461b.chunk.js.LICENSE": "/previsao-tempo/static/js/2.414a461b.chunk.js.LICENSE",
+    "static/media/44.svg": "/previsao-tempo/static/media/44.d475c1ec.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1f093fbc.js",
+    "static/js/2.414a461b.chunk.js",
+    "static/js/main.08732d9d.chunk.js"
+  ]
+}
