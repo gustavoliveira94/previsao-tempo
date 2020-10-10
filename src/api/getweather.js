@@ -8,7 +8,7 @@ const GetWeather = ({ city, initCity }) => {
     const getWeather = useCallback(async () => {
         try {
             const data = await axios.get(
-                `http://api.openweathermap.org/data/2.5/forecast?q=${initCity ||
+                `https://api.openweathermap.org/data/2.5/forecast?q=${initCity ||
                     city}&APPID=7ba73e0eb8efe773ed08bfd0627f07b8`
             );
 
